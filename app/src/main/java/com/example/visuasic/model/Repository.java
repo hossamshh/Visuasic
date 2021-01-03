@@ -2,6 +2,7 @@ package com.example.visuasic.model;
 
 
 import android.app.Application;
+import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ public class Repository {
 
     private LiveData<User> localUser;
     private LiveData<List<ColorCommand>> colorCommands;
+
+    private boolean updateColors = true;
 
 
     private Repository(Application application) {
@@ -88,6 +91,9 @@ public class Repository {
                     boolean isRegistered = dataSnapshot.getValue() != null;
                     User user = new User(firebaseUser.getUid(), isRegistered, true);
                     new UpdateUser(userDAO, user).start();
+
+                    if(isRegistered)
+                        loadUserColors();
                 }
 
                 @Override
@@ -124,11 +130,15 @@ public class Repository {
     }
 
     public void logout() {
+        updateColors = true;
+
         firebaseUser = null;
         firebaseAuth.signOut();
 
         User user = localUser.getValue();
         new UpdateUser(userDAO, new User(user.getUid(), user.isRegistered(), false)).start();
+
+        new DeleteAllColorCommands(colorsDAO).start();
     }
 
     public void setCurrentColor(int r, int g, int b) {
@@ -143,9 +153,70 @@ public class Repository {
 
     public void addColorCommand(ColorCommand colorCommand) {
         new InsertColorCommand(colorsDAO, colorCommand).start();
+
+        String uid = firebaseUser.getUid();
+
+        int r = Color.red(colorCommand.getRgb()) / 85;
+        int g = Color.green(colorCommand.getRgb()) / 85;
+        int b = Color.blue(colorCommand.getRgb()) / 85;
+        String red = r == 0? "0" : r + "";
+        String green = g == 0? "0" : g + "";
+        String blue = b == 0? "0" : b + "";
+        String rgb =  red + green + blue;
+
+        DatabaseReference ref = database.getReference(uid + "/colors/" + rgb);
+        ref.setValue(colorCommand.getCommand());
     }
 
     public void deleteColor(ColorCommand colorCommand) {
         new DeleteColorCommand(colorsDAO, colorCommand).start();
+
+        String uid = firebaseUser.getUid();
+
+        int r = Color.red(colorCommand.getRgb()) / 85;
+        int g = Color.green(colorCommand.getRgb()) / 85;
+        int b = Color.blue(colorCommand.getRgb()) / 85;
+        String red = r == 0? "0" : r + "";
+        String green = g == 0? "0" : g + "";
+        String blue = b == 0? "0" : b + "";
+        String rgb =  red + green + blue;
+
+        DatabaseReference ref = database.getReference(uid + "/colors/" + rgb);
+        ref.removeValue();
+    }
+
+    public void loadUserColors() {
+        String uid = firebaseUser.getUid();
+
+        DatabaseReference ref = database.getReference(uid + "/colors");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(updateColors) {
+                    for(DataSnapshot data: dataSnapshot.getChildren()) {
+                        try {
+                            String rgbText = data.getKey();
+                            int rgb = Integer.parseInt(rgbText);
+                            int r = rgb / 100;
+                            rgb -= r*100;
+                            int g = rgb / 10;
+                            int b = rgb - g*10;
+                            int color = Color.rgb(r*85, g*85, b*85);
+                            String command = data.getValue().toString();
+
+                            ColorCommand colorCommand = new ColorCommand(color, command);
+                            new InsertColorCommand(colorsDAO, colorCommand).start();
+                        }
+                        catch (Exception e) {}
+                    }
+                    updateColors = false;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

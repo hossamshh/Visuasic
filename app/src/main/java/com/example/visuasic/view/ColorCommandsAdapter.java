@@ -27,6 +27,7 @@ public class ColorCommandsAdapter extends RecyclerView.Adapter<ColorCommandsAdap
 
     private ControlViewModel controlViewModel;
     private SeekBar redSeekBar, greenSeekBar, blueSeekBar;
+    private View prev;
 
     public ColorCommandsAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -60,6 +61,7 @@ public class ColorCommandsAdapter extends RecyclerView.Adapter<ColorCommandsAdap
                     redSeekBar.setProgress(r);
                     greenSeekBar.setProgress(g);
                     blueSeekBar.setProgress(b);
+                    prev.setBackgroundColor(current.getRgb());
 
                     controlViewModel.setCurrentColor(r, g, b);
                 }
@@ -84,14 +86,17 @@ public class ColorCommandsAdapter extends RecyclerView.Adapter<ColorCommandsAdap
         else return 0;
     }
 
-    public void setObjects(List<ColorCommand> colorCommands, ControlViewModel controlViewModel, SeekBar redSeekBar, SeekBar greenSeekBar, SeekBar blueSeekBar) {
+    public void setColorCommands(List<ColorCommand> colorCommands) {
         this.colorCommands = colorCommands;
         notifyDataSetChanged();
+    }
 
+    public void setObjects(ControlViewModel controlViewModel, SeekBar redSeekBar, SeekBar greenSeekBar, SeekBar blueSeekBar, View prev) {
         this.controlViewModel = controlViewModel;
         this.redSeekBar = redSeekBar;
         this.greenSeekBar = greenSeekBar;
         this.blueSeekBar = blueSeekBar;
+        this.prev = prev;
     }
 
     public class ColorCommandViewHolder extends RecyclerView.ViewHolder {

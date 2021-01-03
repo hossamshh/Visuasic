@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -67,6 +68,7 @@ public class ControlFragment extends Fragment implements SeekBar.OnSeekBarChange
         recyclerView.setAdapter(colorCommandsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
 
+
         return  rootView;
     }
 
@@ -77,9 +79,10 @@ public class ControlFragment extends Fragment implements SeekBar.OnSeekBarChange
         controlViewModel.getColorCommands().observe(getViewLifecycleOwner(), new Observer<List<ColorCommand>>() {
             @Override
             public void onChanged(List<ColorCommand> colorCommands) {
-                colorCommandsAdapter.setObjects(colorCommands, controlViewModel, redSeekBar, greenSeekBar, blueSeekBar);
+                colorCommandsAdapter.setColorCommands(colorCommands);
             }
         });
+        colorCommandsAdapter.setObjects(controlViewModel, redSeekBar, greenSeekBar, blueSeekBar, colorPreview);
     }
 
     private void openAddDialog() {
