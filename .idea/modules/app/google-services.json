@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "685128922074",
+    "project_id": "visuasic",
+    "storage_bucket": "visuasic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685128922074:android:a17a7188b8dca04c3086e3",
+        "android_client_info": {
+          "package_name": "com.example.visuasic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685128922074-mambuj6vbhglvp2kii6ge04r3ia6kqns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.visuasic",
+            "certificate_hash": "eac187536ea10b75ef83c17b1776fcb42b402a56"
+          }
+        },
+        {
+          "client_id": "685128922074-92rkghvjcphpeml3dtju5oq3gmt1os94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeDTyv5gpUGpEaryxIUjWFVVFxzNC4pLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685128922074-92rkghvjcphpeml3dtju5oq3gmt1os94.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

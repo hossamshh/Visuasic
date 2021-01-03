@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Visuasic</string>
+
+    // Colors components
+    <string name="color_red">Red</string>
+    <string name="color_green">Green</string>
+    <string name="color_blue">Blue</string>
+
+    // buttons
+    <string name="button_play">play</string>
+    <string name="button_pause">pause</string>
+    <string name="button_login">Login</string>
+    <string name="button_register">Register</string>
+    <string name="button_logout">Logout</string>
+
+    // Text views
+    <string name="text_Welcome">Welcome to Visuasic</string>
+    <string name="text_login">Login or register</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_unregistered">Please contact us to register your LED Strip\nThen you can have control</string>
+
+    <string name="text_control">Control your LED strip</string>
+    <string name="text_choose_color">Choose current color</string>
+    <string name="text_preview_color">Preview</string>
+    <string name="text_saved_colors">Saved colors</string>
+
+    <string name="text_enter_tag">Name your color</string>
+
+
+    // Toast
+    <string name="error_login">Invalid email or password</string>
+    <string name="error_inputs">Please enter valid email and password</string>
+
+    <string name="title_activity_home">Visuasic</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_header_title">Welcome to Visuasic</string>
+    <string name="nav_header_subtitle">hossampen97@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    // drawer
+    <string name="menu_control">Control Center</string>
+    <string name="menu_player">Music Player</string>
+    <string name="menu_logout">Logout</string>
+
+    // dialog
+    <string name="dialog_title">Save Color</string>
+    <string name="button_add">Add</string>
+    <string name="button_cancel">Cancel</string>
+
+
+
+
+
+</resources>
