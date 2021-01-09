@@ -54,9 +54,9 @@ public class ColorCommandsAdapter extends RecyclerView.Adapter<ColorCommandsAdap
             holder.clickLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int r = Color.red(current.getRgb()) / 85;
-                    int g = Color.green(current.getRgb()) /85;
-                    int b = Color.blue(current.getRgb()) / 85;
+                    int r = Color.red(current.getRgb()) / 5;
+                    int g = Color.green(current.getRgb()) /5;
+                    int b = Color.blue(current.getRgb()) / 5;
 
                     redSeekBar.setProgress(r);
                     greenSeekBar.setProgress(g);

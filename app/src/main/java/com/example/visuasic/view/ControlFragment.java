@@ -37,21 +37,28 @@ public class ControlFragment extends Fragment implements SeekBar.OnSeekBarChange
 
     private int currentColor = Color.rgb(0, 0, 0);
 
+    private int newColorCommandID;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.control_fragment, container, false);
+        return inflater.inflate(R.layout.control_fragment, container, false);
+    }
 
-        redSeekBar = rootView.findViewById(R.id.redSeekbar);
-        greenSeekBar = rootView.findViewById(R.id.greenSeekbar);
-        blueSeekBar = rootView.findViewById(R.id.blueSeekbar);
-        colorPreview = rootView.findViewById(R.id.colorPreview);
-        addButton = rootView.findViewById(R.id.buttonAdd);
-        recyclerView = rootView.findViewById(R.id.recyclerView);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        redSeekBar = getView().findViewById(R.id.redSeekbar);
+        greenSeekBar = getView().findViewById(R.id.greenSeekbar);
+        blueSeekBar = getView().findViewById(R.id.blueSeekbar);
+        colorPreview = getView().findViewById(R.id.colorPreview);
+        addButton = getView().findViewById(R.id.buttonAdd);
+        recyclerView = getView().findViewById(R.id.recyclerView);
 
 
-        redSeekBar.setMax(3);
-        greenSeekBar.setMax(3);
-        blueSeekBar.setMax(3);
+        redSeekBar.setMax(51);
+        greenSeekBar.setMax(51);
+        blueSeekBar.setMax(51);
 
         redSeekBar.setOnSeekBarChangeListener(this);
         greenSeekBar.setOnSeekBarChangeListener(this);
@@ -64,24 +71,23 @@ public class ControlFragment extends Fragment implements SeekBar.OnSeekBarChange
             }
         });
 
-        colorCommandsAdapter = new ColorCommandsAdapter(rootView.getContext());
+        colorCommandsAdapter = new ColorCommandsAdapter(getView().getContext());
         recyclerView.setAdapter(colorCommandsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getView().getContext()));
 
-
-        return  rootView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         controlViewModel =  new ViewModelProvider(this).get(ControlViewModel.class);
         controlViewModel.getColorCommands().observe(getViewLifecycleOwner(), new Observer<List<ColorCommand>>() {
             @Override
             public void onChanged(List<ColorCommand> colorCommands) {
                 colorCommandsAdapter.setColorCommands(colorCommands);
+
+                if(colorCommands.size() > 0)
+                    newColorCommandID = colorCommands.get(colorCommands.size()-1).getID() + 1;
+                else
+                    newColorCommandID = 1;
             }
         });
+
         colorCommandsAdapter.setObjects(controlViewModel, redSeekBar, greenSeekBar, blueSeekBar, colorPreview);
     }
 
@@ -104,7 +110,7 @@ public class ControlFragment extends Fragment implements SeekBar.OnSeekBarChange
         int g = greenSeekBar.getProgress();
         int b = blueSeekBar.getProgress();
 
-        currentColor = Color.rgb(r*85, g*85, b*85);
+        currentColor = Color.rgb(r*5, g*5, b*5);
         colorPreview.setBackgroundColor(currentColor);
 
         controlViewModel.setCurrentColor(r, g, b);
@@ -112,7 +118,7 @@ public class ControlFragment extends Fragment implements SeekBar.OnSeekBarChange
 
     @Override
     public void getColorPhrase(String colorPhrase) {
-        ColorCommand colorCommand = new ColorCommand(currentColor, colorPhrase);
+        ColorCommand colorCommand = new ColorCommand(newColorCommandID ,currentColor, colorPhrase);
         controlViewModel.addColorCommand(colorCommand);
     }
 }

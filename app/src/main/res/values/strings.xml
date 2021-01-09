@@ -42,7 +42,7 @@
 
     // drawer
     <string name="menu_control">Control Center</string>
-    <string name="menu_player">Music Player</string>
+    <string name="menu_player">Visualize Music</string>
     <string name="menu_logout">Logout</string>
 
     // dialog

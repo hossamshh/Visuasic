@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
@@ -58,6 +59,7 @@ public class Repository {
 
         localUser = userDAO.getUser();
         colorCommands = colorsDAO.getAllColors();
+
     }
 
     public static Repository getRepo(Application application) {
@@ -144,9 +146,10 @@ public class Repository {
     public void setCurrentColor(int r, int g, int b) {
         String uid = firebaseUser.getUid();
         DatabaseReference ref = database.getReference(uid + "/rgb");
-        String red = r == 0? "0" : r + "";
-        String green = g == 0? "0" : g + "";
-        String blue = b == 0? "0" : b + "";
+
+        String red = r == 0? "00" : r < 10? "0" + r : r + "";
+        String green = g == 0? "00" : g < 10? "0" + g : g + "";
+        String blue = b == 0? "00" : b < 10? "0" + b : b + "";
 
         ref.setValue(red + green + blue);
     }
@@ -156,32 +159,26 @@ public class Repository {
 
         String uid = firebaseUser.getUid();
 
-        int r = Color.red(colorCommand.getRgb()) / 85;
-        int g = Color.green(colorCommand.getRgb()) / 85;
-        int b = Color.blue(colorCommand.getRgb()) / 85;
-        String red = r == 0? "0" : r + "";
-        String green = g == 0? "0" : g + "";
-        String blue = b == 0? "0" : b + "";
+        int r = Color.red(colorCommand.getRgb()) / 5;
+        int g = Color.green(colorCommand.getRgb()) / 5;
+        int b = Color.blue(colorCommand.getRgb()) / 5;
+
+        String red = r == 0? "00" : r < 10? "0" + r : r + "";
+        String green = g == 0? "00" : g < 10? "0" + g : g + "";
+        String blue = b == 0? "00" : b < 10? "0" + b : b + "";
         String rgb =  red + green + blue;
 
-        DatabaseReference ref = database.getReference(uid + "/colors/" + rgb);
+        DatabaseReference ref = database.getReference(uid + "/colors/" + colorCommand.getID() + "/" + rgb);
         ref.setValue(colorCommand.getCommand());
     }
 
     public void deleteColor(ColorCommand colorCommand) {
+        int ID = colorCommand.getID();
         new DeleteColorCommand(colorsDAO, colorCommand).start();
 
         String uid = firebaseUser.getUid();
 
-        int r = Color.red(colorCommand.getRgb()) / 85;
-        int g = Color.green(colorCommand.getRgb()) / 85;
-        int b = Color.blue(colorCommand.getRgb()) / 85;
-        String red = r == 0? "0" : r + "";
-        String green = g == 0? "0" : g + "";
-        String blue = b == 0? "0" : b + "";
-        String rgb =  red + green + blue;
-
-        DatabaseReference ref = database.getReference(uid + "/colors/" + rgb);
+        DatabaseReference ref = database.getReference(uid + "/colors/" + ID);
         ref.removeValue();
     }
 
@@ -195,19 +192,26 @@ public class Repository {
                 if(updateColors) {
                     for(DataSnapshot data: dataSnapshot.getChildren()) {
                         try {
-                            String rgbText = data.getKey();
-                            int rgb = Integer.parseInt(rgbText);
-                            int r = rgb / 100;
-                            rgb -= r*100;
-                            int g = rgb / 10;
-                            int b = rgb - g*10;
-                            int color = Color.rgb(r*85, g*85, b*85);
-                            String command = data.getValue().toString();
+                            int ID = Integer.parseInt(data.getKey());
 
-                            ColorCommand colorCommand = new ColorCommand(color, command);
-                            new InsertColorCommand(colorsDAO, colorCommand).start();
+                            for(DataSnapshot colorC: data.getChildren()) {
+                                String rgbText = colorC.getKey();
+                                String command = colorC.getValue().toString();
+
+                                int rgb = Integer.parseInt(rgbText);
+                                int r = rgb / 10000;
+                                rgb -= r*10000;
+                                int g = rgb / 100;
+                                int b = rgb - g*100;
+                                int color = Color.rgb(r*5, g*5, b*5);
+
+                                ColorCommand colorCommand = new ColorCommand(ID, color, command);
+                                new InsertColorCommand(colorsDAO, colorCommand).start();
+                            }
                         }
-                        catch (Exception e) {}
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     updateColors = false;
                 }

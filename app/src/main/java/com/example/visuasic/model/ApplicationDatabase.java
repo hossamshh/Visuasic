@@ -14,7 +14,7 @@ import com.example.visuasic.model.Entities.ColorCommand;
 import com.example.visuasic.model.Entities.User;
 import com.example.visuasic.model.Helpers.InsertUser;
 
-@Database(entities = {User.class, ColorCommand.class}, version = 3, exportSchema = false)
+@Database(entities = {User.class, ColorCommand.class}, version = 5, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
     private static ApplicationDatabase instance;
 
