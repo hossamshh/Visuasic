@@ -83,25 +83,25 @@ public class MusicPlayerFragment extends Fragment implements View.OnClickListene
 
         musicViewModel = new ViewModelProvider(this).get(MusicViewModel.class);
 
-        SingletonPlayer.initPlayer(getContext(), R.raw.song_of_myself);
+        SingletonPlayer.initPlayer(getContext(), R.raw.ludovico_einaudi_experience);
         requestAudioPermission();
 
         setUIParams();
     }
 
     private void setUIParams() {
-        SingletonPlayer.initPlayer(getContext(), R.raw.song_of_myself);
+        SingletonPlayer.initPlayer(getContext(), R.raw.ludovico_einaudi_experience);
 
         requestAudioPermission();
 
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.song_of_myself);
+        AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.ludovico_einaudi_experience);
         mmr.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
         byte [] data = mmr.getEmbeddedPicture();
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         imageView.setImageBitmap(bitmap);
 
-        musicName.setText(getResources().getResourceEntryName(R.raw.song_of_myself));
+        musicName.setText(getResources().getResourceEntryName(R.raw.ludovico_einaudi_experience));
 
         musicSeekBar.setMax(SingletonPlayer.getDuration());
     }

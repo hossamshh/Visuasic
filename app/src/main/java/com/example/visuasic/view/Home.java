@@ -57,9 +57,9 @@ public class Home extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        MusicPlayerFragment musicPlayerFragment = new MusicPlayerFragment();
+        ControlFragment controlFragment = new ControlFragment();
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentLayout, musicPlayerFragment);
+        fragmentTransaction.replace(R.id.fragmentLayout, controlFragment);
         fragmentTransaction.commit();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

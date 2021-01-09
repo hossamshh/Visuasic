@@ -79,6 +79,9 @@ public class Repository {
                             firebaseUser = firebaseAuth.getCurrentUser();
                             checkRegistered();
                         }
+                        else {
+                            new UpdateUser(userDAO, new User("initial", false, false)).start();
+                        }
                     }
                 });
     }

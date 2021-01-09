@@ -25,7 +25,6 @@ public class Login extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private AuthViewModel authViewModel;
-    private boolean firstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +42,14 @@ public class Login extends AppCompatActivity {
         authViewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
+                Log.d(TAG, "login: ");
+
                 if(user != null && user.isLoggedIn()){
-                    Log.d(TAG, "login: ");
                     login(user);
                 }
-                else if(binding.emailInput.getText().length() > 0 && binding.passwordInput.getText().length() > 0 && !firstTime){
+                else if(binding.emailInput.getText().length() > 0 && binding.passwordInput.getText().length() > 0){
                     errorLogin();
                 }
-                firstTime = false;
             }
         });
 
